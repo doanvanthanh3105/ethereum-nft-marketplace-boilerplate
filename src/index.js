@@ -1,10 +1,10 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import App from "./App";
-import { MoralisProvider } from "react-moralis";
-import "./index.css";
-import QuickStart from "components/QuickStart";
-import { MoralisDappProvider } from "./providers/MoralisDappProvider/MoralisDappProvider";
+import React from 'react';
+import ReactDOM from 'react-dom';
+import App from './App';
+import { MoralisProvider } from 'react-moralis';
+import './index.css';
+import QuickStart from 'components/QuickStart';
+import { MoralisDappProvider } from './providers/MoralisDappProvider/MoralisDappProvider';
 
 /** Get your free Moralis Account https://moralis.io/ */
 
@@ -23,7 +23,7 @@ const Application = () => {
     );
   else {
     return (
-      <div style={{ display: "flex", justifyContent: "center" }}>
+      <div style={{ display: 'flex', justifyContent: 'center' }}>
         <QuickStart />
       </div>
     );
@@ -34,5 +34,5 @@ ReactDOM.render(
   // <React.StrictMode>
   <Application />,
   // </React.StrictMode>,
-  document.getElementById("root")
+  document.getElementById('root')
 );

@@ -1,14 +1,28 @@
-import React, { useEffect, useState } from "react";
-import { useMoralis } from "react-moralis";
-import MoralisDappContext from "./context";
+import React, { useEffect, useState } from 'react';
+import { useMoralis } from 'react-moralis';
+import MoralisDappContext from './context';
+import { createABI, auctionABI } from '../../helpers/abi';
 
 function MoralisDappProvider({ children }) {
   const { web3, Moralis, user } = useMoralis();
   const [walletAddress, setWalletAddress] = useState();
-  const [chainId, setChainId] = useState();       
-  const [contractABI, setContractABI] = useState('{"noContractDeployed": true}'); //Smart Contract ABI here
-  const [marketAddress, setMarketAddress] = useState(); //Smart Contract Address Here
+  const [chainId, setChainId] = useState();
+  const [contractABI, setContractABI] = useState(
+    '[ { "inputs": [], "stateMutability": "nonpayable", "type": "constructor" }, { "anonymous": false, "inputs": [ { "indexed": true, "internalType": "uint256", "name": "itemId", "type": "uint256" }, { "indexed": true, "internalType": "address", "name": "nftContract", "type": "address" }, { "indexed": true, "internalType": "uint256", "name": "tokenId", "type": "uint256" }, { "indexed": false, "internalType": "address", "name": "seller", "type": "address" }, { "indexed": false, "internalType": "address", "name": "owner", "type": "address" }, { "indexed": false, "internalType": "uint256", "name": "price", "type": "uint256" }, { "indexed": false, "internalType": "bool", "name": "sold", "type": "bool" } ], "name": "MarketItemCreated", "type": "event" }, { "anonymous": false, "inputs": [ { "indexed": true, "internalType": "uint256", "name": "itemId", "type": "uint256" }, { "indexed": false, "internalType": "address", "name": "owner", "type": "address" } ], "name": "MarketItemSold", "type": "event" }, { "inputs": [ { "internalType": "address", "name": "nftContract", "type": "address" }, { "internalType": "uint256", "name": "tokenId", "type": "uint256" }, { "internalType": "uint256", "name": "price", "type": "uint256" } ], "name": "createMarketItem", "outputs": [], "stateMutability": "payable", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "nftContract", "type": "address" }, { "internalType": "uint256", "name": "itemId", "type": "uint256" } ], "name": "createMarketSale", "outputs": [], "stateMutability": "payable", "type": "function" }, { "inputs": [], "name": "fetchMarketItems", "outputs": [ { "components": [ { "internalType": "uint256", "name": "itemId", "type": "uint256" }, { "internalType": "address", "name": "nftContract", "type": "address" }, { "internalType": "uint256", "name": "tokenId", "type": "uint256" }, { "internalType": "address payable", "name": "seller", "type": "address" }, { "internalType": "address payable", "name": "owner", "type": "address" }, { "internalType": "uint256", "name": "price", "type": "uint256" }, { "internalType": "bool", "name": "sold", "type": "bool" } ], "internalType": "struct marketPlaceBoilerPlate.MarketItem[]", "name": "", "type": "tuple[]" } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "owner", "outputs": [ { "internalType": "address", "name": "", "type": "address" } ], "stateMutability": "view", "type": "function"}]'
+  );
+  const [marketAddress, setMarketAddress] = useState(
+    '0x54e2182D5870c8376c1f2203eC3E3AcB1b70034e'
+  ); //Smart Contract Address Here
 
+  const createContractABI = createABI;
+
+  const [createAddress, setCreateAddress] = useState(
+    '0xdD311ea35B9d3d2E02eEc5F1cDE798A02e1b8d80'
+  );
+
+  const auctionContractABI = auctionABI;
+
+  const auctionAddress = '0x97a8a5f651d808c61a5b7a452098e29763df4547';
 
   useEffect(() => {
     Moralis.onChainChanged(function (chain) {
@@ -24,12 +38,28 @@ function MoralisDappProvider({ children }) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => setChainId(web3.givenProvider?.chainId));
   useEffect(
-    () => setWalletAddress(web3.givenProvider?.selectedAddress || user?.get("ethAddress")),
+    () =>
+      setWalletAddress(
+        web3.givenProvider?.selectedAddress || user?.get('ethAddress')
+      ),
     [web3, user]
   );
 
   return (
-    <MoralisDappContext.Provider value={{ walletAddress, chainId, marketAddress, setMarketAddress, contractABI, setContractABI }}>
+    <MoralisDappContext.Provider
+      value={{
+        walletAddress,
+        chainId,
+        marketAddress,
+        setMarketAddress,
+        contractABI,
+        setContractABI,
+        createContractABI,
+        auctionContractABI,
+        auctionAddress,
+        createAddress,
+        setCreateAddress,
+      }}>
       {children}
     </MoralisDappContext.Provider>
   );
@@ -38,7 +68,7 @@ function MoralisDappProvider({ children }) {
 function useMoralisDapp() {
   const context = React.useContext(MoralisDappContext);
   if (context === undefined) {
-    throw new Error("useMoralisDapp must be used within a MoralisDappProvider");
+    throw new Error('useMoralisDapp must be used within a MoralisDappProvider');
   }
   return context;
 }

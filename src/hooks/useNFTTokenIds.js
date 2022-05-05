@@ -1,8 +1,8 @@
-import { ContactsOutlined } from "@ant-design/icons";
-import { useMoralisDapp } from "providers/MoralisDappProvider/MoralisDappProvider";
-import { useEffect, useState } from "react";
-import { useMoralisWeb3Api, useMoralisWeb3ApiCall } from "react-moralis";
-import { useIPFS } from "./useIPFS";
+import { ContactsOutlined } from '@ant-design/icons';
+import { useMoralisDapp } from 'providers/MoralisDappProvider/MoralisDappProvider';
+import { useEffect, useState } from 'react';
+import { useMoralisWeb3Api, useMoralisWeb3ApiCall } from 'react-moralis';
+import { useIPFS } from './useIPFS';
 
 export const useNFTTokenIds = (addr) => {
   const { token } = useMoralisWeb3Api();
@@ -21,6 +21,13 @@ export const useNFTTokenIds = (addr) => {
     address: addr,
     limit: 10,
   });
+  // const { mdata, merror, misLoading } = useMoralisWeb3ApiCall(
+  //   token.getNFTOwners,
+  //   {
+  //     chain: chainId,
+  //     address: addr,
+  //   }
+  // );
 
   useEffect(async () => {
     if (data?.result) {
@@ -40,8 +47,8 @@ export const useNFTTokenIds = (addr) => {
               });
           } catch (error) {
             setFetchSuccess(false);
-              
-/*          !!Temporary work around to avoid CORS issues when retrieving NFT images!!
+
+            /*          !!Temporary work around to avoid CORS issues when retrieving NFT images!!
             Create a proxy server as per https://dev.to/terieyenike/how-to-create-a-proxy-server-on-heroku-5b5c
             Replace <your url here> with your proxy server_url below
             Remove comments :)
